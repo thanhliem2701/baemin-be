@@ -122,3 +122,10 @@ model users {
   order_detail order_detail[]
   orders       orders[]
 }
+
+model promotions {
+  id            Int      @id @default(autoincrement())
+  promotioncode String
+  expire_date   DateTime @db.Date
+  companies_id  String?
+}
