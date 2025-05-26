@@ -34,7 +34,7 @@ export class ComboFoodsService {
   }
 
   findOne(id: number) {
-    this.prisma.combo_foods.findFirst({ where: { id } });
+    return this.prisma.combo_foods.findFirst({ where: { id } });
   }
 
   async update(id: number, updateComboFoodDto: UpdateComboFoodDto) {
