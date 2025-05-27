@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { PrismaClient } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  prisma = new PrismaClient();
+  constructor(public prisma: PrismaService) {}
 
   // create a new user
   async create(createUserDto: CreateUserDto) {
@@ -36,22 +36,22 @@ export class UsersService {
     }
   }
 
-  // login user
-  async login(username: string, password: string) {
-    // Find the user by username
-    const user = await this.findOne(username);
-    if (!user) {
-      return 'User not found';
-    }
-    // Check if the password matches
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return 'Password is incorrect';
+  // // login user
+  // async login(username: string, password: string) {
+  //   // Find the user by username
+  //   const user = await this.findOne(username);
+  //   if (!user) {
+  //     return 'User not found';
+  //   }
+  //   // Check if the password matches
+  //   const isMatch = await bcrypt.compare(password, user.password);
+  //   if (!isMatch) return 'Password is incorrect';
     
-    // leave out the password from the user object
-    const { password: _, ...safeUser } = user;
+  //   // leave out the password from the user object
+  //   const { password: _, ...safeUser } = user;
 
-    return safeUser;
-  }
+  //   return safeUser;
+  // }
 
   // find user by username use for login function
   findOne(username: string) {

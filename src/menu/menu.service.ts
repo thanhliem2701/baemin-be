@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
-import { PrismaClient } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class MenuService {
-  prisma = new PrismaClient();
+  constructor(public prisma: PrismaService) {}
+
   async create(createMenuDto: CreateMenuDto) {
     const { name, imgsrc, description } = createMenuDto;
 

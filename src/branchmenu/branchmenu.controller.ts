@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete,UseGuards } from '@nestjs/common';
 import { BranchmenuService } from './branchmenu.service';
 import { CreateBranchmenuDto } from './dto/create-branchmenu.dto';
 import { UpdateBranchmenuDto } from './dto/update-branchmenu.dto';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('branchmenu')
 export class BranchmenuController {
   constructor(private readonly branchmenuService: BranchmenuService) {}

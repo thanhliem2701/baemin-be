@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CreateComboFoodDto } from './dto/create-combo_food.dto';
 import { UpdateComboFoodDto } from './dto/update-combo_food.dto';
-import { PrismaClient } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ComboFoodsService {
-  prisma = new PrismaClient();
+  constructor(public prisma: PrismaService) {}
 
   async create(createComboFoodDto: CreateComboFoodDto) {
     const { menu_id, name, description, price,img,promotion_flag } = createComboFoodDto;

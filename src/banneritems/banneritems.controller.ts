@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { BanneritemsService } from './banneritems.service';
 import { CreateBanneritemDto } from './dto/create-banneritem.dto';
 import { UpdateBanneritemDto } from './dto/update-banneritem.dto';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('banneritems')
 export class BanneritemsController {
   constructor(private readonly banneritemsService: BanneritemsService) {}

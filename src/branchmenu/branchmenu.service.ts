@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBranchmenuDto } from './dto/create-branchmenu.dto';
 import { UpdateBranchmenuDto } from './dto/update-branchmenu.dto';
-import { PrismaClient } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class BranchmenuService {
-  prisma = new PrismaClient();
+  constructor(public prisma: PrismaService) {}
 
   async create(createBranchmenuDto: CreateBranchmenuDto) {
     const { name, icon, branch_id, menu_flag } = createBranchmenuDto;

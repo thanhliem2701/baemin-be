@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-import { PrismaClient } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class CompaniesService {
-  prisma = new PrismaClient();
+  constructor(public prisma: PrismaService) {}
+
   async create(createCompanyDto: CreateCompanyDto) {
     const {name, img, tel, address, commission, tag} = createCompanyDto;
 

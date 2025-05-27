@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBanneritemDto } from './dto/create-banneritem.dto';
 import { UpdateBanneritemDto } from './dto/update-banneritem.dto';
-import { PrismaClient } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class BanneritemsService {
-  prisma = new PrismaClient();
+  constructor(public prisma: PrismaService) {}
+  
   async create(createBanneritemDto: CreateBanneritemDto) {
     const  { name ,imgsrc, url } = createBanneritemDto
     try {
