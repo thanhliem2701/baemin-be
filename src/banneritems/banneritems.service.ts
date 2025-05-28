@@ -2,13 +2,23 @@ import { Injectable } from '@nestjs/common';
 import { CreateBanneritemDto } from './dto/create-banneritem.dto';
 import { UpdateBanneritemDto } from './dto/update-banneritem.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ValidationService } from '../common/validation/validation.service';
+import { messages } from 'src/constants/messages';
 
 @Injectable()
 export class BanneritemsService {
-  constructor(public prisma: PrismaService) {}
+  constructor(
+    public prisma: PrismaService,
+    private readonly validationService: ValidationService
+  ) {}
   
   async create(createBanneritemDto: CreateBanneritemDto) {
     const  { name ,imgsrc, url } = createBanneritemDto
+
+    //require validate
+    this.validationService.validateRequired(name, messages.BANNER_NAME_NULL);
+    this.validationService.validateRequired(imgsrc, messages.IMGSRC_NULL_MSG);
+    this.validationService.validateRequired(url, messages.BANNER_URL_NULL);
     try {
       await this.prisma.banneritems.create({
         data: {
@@ -17,11 +27,10 @@ export class BanneritemsService {
           url,
         }
       })
-      return `Add new banner item successfully !`;
+      return messages.ADD_BANNER_SUCCESSFUL;
     }
     catch (error) {
-      console.error('Error creating banner item:', error);
-      return 'error: can not add banner item, please contact to administrator !';
+      return messages.ADD_BANNER_FAIL;
     }
   }
 
@@ -30,10 +39,16 @@ export class BanneritemsService {
   }
 
   findOne(id: number) {
-    return this.prisma.banneritems.findFirst({ where: { id } });;
+    //validate null
+    const validId = this.validationService.validateId(id, messages.BANNER_ID_NULL);
+
+    return this.prisma.banneritems.findFirst({ where: { id: validId } });;
   }
 
   async update(id: number, updateBanneritemDto: UpdateBanneritemDto) {
+    //validate null
+    const validId = this.validationService.validateId(id, messages.BANNER_ID_NULL);
+
     const { name, imgsrc, url } = updateBanneritemDto
     try {
       const updateData: any = {};
@@ -42,16 +57,15 @@ export class BanneritemsService {
       if (url !== '') { updateData.description = url; }
 
       await this.prisma.banneritems.update({
-        where: { id },
+        where: { id: validId },
         data: {
           ...updateData,
         }
       });
-      return `Update banner item successfully !`;
+      return messages.UPD_BANNER_SUCCESSFUL;
     }
     catch (error) {
-      console.error('Error updating banner item:', error);
-      return 'error: can not update banner item, please contact to administrator !';
+      return messages.UPD_BANNER_FAIL;
     }
   }
 
@@ -60,11 +74,10 @@ export class BanneritemsService {
       await this.prisma.banneritems.delete({
         where: { id }
       });
-      return `Delete banner item successfully !`;
+      return messages.DEL_BANNER_SUCCESSFUL;
     }
     catch (error) {
-      console.error('Error deleting banner item:', error);
-      return 'error: can not delete banner item, please contact to administrator !';
+      return messages.DEL_BANNER_FAIL;
     }
   }
 }

@@ -2,18 +2,28 @@ import { Injectable } from '@nestjs/common';
 import { CreateComboFoodDto } from './dto/create-combo_food.dto';
 import { UpdateComboFoodDto } from './dto/update-combo_food.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ValidationService } from '../common/validation/validation.service';
+import { messages } from 'src/constants/messages';
 
 @Injectable()
 export class ComboFoodsService {
-  constructor(public prisma: PrismaService) {}
+  constructor(
+    public prisma: PrismaService,
+    private readonly validationService: ValidationService,
+  ) {}
 
   async create(createComboFoodDto: CreateComboFoodDto) {
     const { menu_id, name, description, price,img,promotion_flag } = createComboFoodDto;
 
+    //validate id
+    const valid_menuId = this.validationService.validateId(menu_id, messages.MENU_ID_NULL);
+    this.validationService.validateRequired(name, messages.NAME_NULL);
+    this.validationService.validatePrice(price, messages.PRICE_NULL);
+
     try {
       await this.prisma.combo_foods.create({
         data: {
-          menu_id,
+          menu_id: valid_menuId,
           name,
           description,
           price,
@@ -21,11 +31,10 @@ export class ComboFoodsService {
           promotion_flag
         }
       })
-      return `Add new combo or food successfully !`;
+      return messages.ADD_COMBO_FOOD_SUCCESSFUL;
     }
     catch (error) {
-      console.error('Error creating combo or food :', error);
-      return 'error: can not add combo or food, please contact to administrator !';
+      return messages.ADD_COMBO_FOOD_FAIL;
     }
   }
 
@@ -34,7 +43,9 @@ export class ComboFoodsService {
   }
 
   findOne(id: number) {
-    return this.prisma.combo_foods.findFirst({ where: { id } });
+    //validate id
+    const validId = this.validationService.validateId(id, messages.COMOBO_FOOD_ID_NULL);
+    return this.prisma.combo_foods.findFirst({ where: { id: validId } });
   }
 
   async update(id: number, updateComboFoodDto: UpdateComboFoodDto) {
@@ -54,11 +65,10 @@ export class ComboFoodsService {
           ...updateData,
         }
       });
-      return `Update combo or food successfully !`;
+      return messages.UPD_COMBO_FOOD_SUCCESSFUL;
     }
     catch (error) {
-      console.error('Error updating combo or food:', error);
-      return 'error: can not update combo or food, please contact to administrator !';
+      return messages.UPD_COMBO_FOOD_FAIL;
     }
   }
 
@@ -67,11 +77,10 @@ export class ComboFoodsService {
       await this.prisma.combo_foods.delete({
         where: { id }
       });
-      return `Delete combo or food successfully !`;
+      return messages.DEL_COMBO_FOOD_SUCCESSFUL;
     }
     catch (error) {
-      console.error('Error deleting combo or food :', error);
-      return 'error: can not delete combo or food, please contact to administrator !';
+      return messages.DEL_COMBO_FOOD_FAIL;
     }
   }
 }

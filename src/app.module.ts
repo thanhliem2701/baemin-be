@@ -13,11 +13,12 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [MenuModule, BanneritemsModule, CompaniesModule, BranchesModule, BranchmenuModule, 
     ComboFoodsModule, UsersModule, OrdersModule, PrismaModule, ConfigModule.forRoot({isGlobal: true}), 
-    AuthModule,JwtModule.register({global: true})],
+    AuthModule,JwtModule.register({global: true}), CommonModule],
   controllers: [AppController],
   providers: [AppService],
 })

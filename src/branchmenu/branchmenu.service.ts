@@ -2,28 +2,35 @@ import { Injectable } from '@nestjs/common';
 import { CreateBranchmenuDto } from './dto/create-branchmenu.dto';
 import { UpdateBranchmenuDto } from './dto/update-branchmenu.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ValidationService } from '../common/validation/validation.service';
+import { messages } from 'src/constants/messages';
 
 @Injectable()
 export class BranchmenuService {
-  constructor(public prisma: PrismaService) {}
+  constructor(
+    public prisma: PrismaService,
+    private readonly validationService: ValidationService,
+  ) {}
 
   async create(createBranchmenuDto: CreateBranchmenuDto) {
     const { name, icon, branch_id, menu_flag } = createBranchmenuDto;
 
+    //validate branch_id
+    const validId = this.validationService.validateId(branch_id, messages.BRANCHID_NULL);
+    this.validationService.validateRequired(name, messages.BRANCH_MENU_NAME_NULL);
     try {
       await this.prisma.branchmenu.create({
         data: {
           name,
           icon,
-          branch_id,
+          branch_id: validId,
           menu_flag
         }
       })
-      return `Add new branch menu successfully !`;
+      return messages.ADD_BRANCH_MENU_SUCCESSFUL;
     }
     catch (error) {
-      console.error('Error creating branch menu:', error);
-      return 'error: can not add branch menu, please contact to administrator !';
+      return messages.ADD_BRANCH_MENU_FAIL;
     }
   }
 
@@ -32,7 +39,10 @@ export class BranchmenuService {
   }
 
   findOne(id: number) {
-    return this.prisma.branchmenu.findFirst({ where: { id } });
+    //validate id
+    const validId = this.validationService.validateId(id, messages.MENU_ID_NULL);
+
+    return this.prisma.branchmenu.findFirst({ where: { id: validId } });
   }
 
   async update(id: number, updateBranchmenuDto: UpdateBranchmenuDto) {
@@ -50,11 +60,10 @@ export class BranchmenuService {
           ...updateData,
         }
       });
-      return `Update branch menu successfully !`;
+      return messages.UPD_BRANCH_MENU_SUCCESSFUL;
     }
     catch (error) {
-      console.error('Error updating branch menu:', error);
-      return 'error: can not update branch menu, please contact to administrator !';
+      return messages.UPD_BRANCH_MENU_FAIL;
     }
   }
 
@@ -63,11 +72,10 @@ export class BranchmenuService {
       await this.prisma.branchmenu.delete({
         where: { id }
       });
-      return `Delete branch menu successfully !`;
+      return messages.DEL_BRANCH_MENU_SUCCESSFUL;
     }
     catch (error) {
-      console.error('Error deleting branch menu :', error);
-      return 'error: can not delete branch menu, please contact to administrator !';
+      return messages.DEL_BRANCH_MENU_FAIL;
     }
   }
 }

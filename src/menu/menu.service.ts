@@ -2,14 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ValidationService } from '../common/validation/validation.service';
+import { messages } from 'src/constants/messages';
 
 @Injectable()
 export class MenuService {
-  constructor(public prisma: PrismaService) {}
+  constructor(
+    public prisma: PrismaService,
+    private readonly validationService: ValidationService,
+  ) {}
 
   async create(createMenuDto: CreateMenuDto) {
     const { name, imgsrc, description } = createMenuDto;
 
+    //validate name
+    this.validationService.validateRequired(name, messages.MENU_NAME_NULL);
     try {
       await this.prisma.menu.create({
         data: {
@@ -18,11 +25,10 @@ export class MenuService {
           description,
         }
       })
-      return `Add new menu successfully !`;
+      return messages.ADD_BRANCH_MENU_SUCCESSFUL;
     }
     catch (error) {
-      console.error('Error creating menu:', error);
-      return 'error: can not add menu, please contact to administrator !';
+      return messages.ADD_BRANCH_MENU_FAIL;
     }
   }
 
@@ -31,7 +37,9 @@ export class MenuService {
   }
 
   findOne(id: number) {
-    return this.prisma.menu.findFirst({ where: { id } });;
+    //validate id
+    const validId = this.validationService.validateId(id, messages.MENU_ID_NULL);
+    return this.prisma.menu.findFirst({ where: { id: validId } });;
   }
 
   async update(id: number, updateMenuDto: UpdateMenuDto) {
@@ -48,11 +56,10 @@ export class MenuService {
           ...updateData,
         }
       });
-      return `Update menu successfully !`;
+      return messages.UPD_BRANCH_MENU_SUCCESSFUL;
     }
     catch (error) {
-      console.error('Error updating menu:', error);
-      return 'error: can not update menu, please contact to administrator !';
+      return messages.UPD_BRANCH_MENU_FAIL;
     }
   }
 
@@ -61,11 +68,10 @@ export class MenuService {
       await this.prisma.menu.delete({
         where: { id }
       });
-      return `Delete menu successfully !`;
+      return messages.DEL_BRANCH_MENU_SUCCESSFUL;
     }
     catch (error) {
-      console.error('Error deleting menu:', error);
-      return 'error: can not delete menu, please contact to administrator !';
+      return messages.DEL_BRANCH_MENU_FAIL;
     }
   }
 }

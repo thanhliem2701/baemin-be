@@ -4,6 +4,7 @@ import { CreateBanneritemDto } from './dto/create-banneritem.dto';
 import { UpdateBanneritemDto } from './dto/update-banneritem.dto';
 import { AuthGuard } from '@nestjs/passport';
 
+
 @UseGuards(AuthGuard('jwt'))
 @Controller('banneritems')
 export class BanneritemsController {

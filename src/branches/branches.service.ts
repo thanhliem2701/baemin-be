@@ -2,13 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { CreateBranchDto } from './dto/create-branch.dto';
 import { UpdateBranchDto } from './dto/update-branch.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ValidationService } from '../common/validation/validation.service';
+import { messages } from 'src/constants/messages';
 
 @Injectable()
 export class BranchesService {
-  constructor(public prisma: PrismaService) {}
+  constructor(
+    public prisma: PrismaService,
+    private readonly validationService: ValidationService,
+  ) {}
 
   async create(createBranchDto: CreateBranchDto) {
     const {name,address, img, tradinghour, pricerange, total_rating,number_of_rating,company_id} = createBranchDto;
+
+    //validate id
+    const valid_companyId = this.validationService.validateId(company_id, messages.COMPANYID_NULL);
 
     try {
       await this.prisma.branches.create({
@@ -20,14 +28,13 @@ export class BranchesService {
           pricerange,
           total_rating,
           number_of_rating,
-          company_id
+          company_id: valid_companyId
         }
       })
-      return `Add new branch successfully !`;
+      return messages.ADD_BRANCH_SUCCESSFUL;
     }
     catch (error) {
-      console.error('Error creating branch:', error);
-      return 'error: can not add branch, please contact to administrator !';
+      return messages.ADD_BRANCH_FAIL;
     }
   }
 
@@ -36,7 +43,9 @@ export class BranchesService {
   }
 
   findOne(id: number) {
-    return this.prisma.branches.findFirst({ where: { id } });
+    //vailidate id
+    const validId = this.validationService.validateId(id, messages.BRANCHID_NULL);
+    return this.prisma.branches.findFirst({ where: { id: validId } });
   }
 
   async update(id: number, updateBranchDto: UpdateBranchDto) {
@@ -58,11 +67,10 @@ export class BranchesService {
           ...updateData,
         }
       });
-      return `Update branch successfully !`;
+      return messages.UPD_BRANCH_SUCCESSFUL;
     }
     catch (error) {
-      console.error('Error updating branch:', error);
-      return 'error: can not update branch, please contact to administrator !';
+      return messages.UPD_BRANCH_FAIL;
     }
   }
 
@@ -71,11 +79,10 @@ export class BranchesService {
       await this.prisma.branches.delete({
         where: { id }
       });
-      return `Delete branch successfully !`;
+      return messages.DEL_BRANCH_SUCCESSFUL;
     }
     catch (error) {
-      console.error('Error deleting branch:', error);
-      return 'error: can not delete branch, please contact to administrator !';
+      return messages.DEL_BRANCH_FAIL;
     }
   }
 }
