@@ -4,15 +4,9 @@ import { CreateComboFoodDto } from './dto/create-combo_food.dto';
 import { UpdateComboFoodDto } from './dto/update-combo_food.dto';
 import { AuthGuard } from '@nestjs/passport';
 
-@UseGuards(AuthGuard('jwt'))
 @Controller('combo-foods')
 export class ComboFoodsController {
   constructor(private readonly comboFoodsService: ComboFoodsService) {}
-
-  @Post()
-  create(@Body() createComboFoodDto: CreateComboFoodDto) {
-    return this.comboFoodsService.create(createComboFoodDto);
-  }
 
   @Get()
   findAll() {
@@ -22,6 +16,12 @@ export class ComboFoodsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.comboFoodsService.findOne(+id);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post()
+  create(@Body() createComboFoodDto: CreateComboFoodDto) {
+    return this.comboFoodsService.create(createComboFoodDto);
   }
 
   @Patch(':id')

@@ -4,15 +4,10 @@ import { CreateBranchmenuDto } from './dto/create-branchmenu.dto';
 import { UpdateBranchmenuDto } from './dto/update-branchmenu.dto';
 import { AuthGuard } from '@nestjs/passport';
 
-@UseGuards(AuthGuard('jwt'))
+
 @Controller('branchmenu')
 export class BranchmenuController {
   constructor(private readonly branchmenuService: BranchmenuService) {}
-
-  @Post()
-  create(@Body() createBranchmenuDto: CreateBranchmenuDto) {
-    return this.branchmenuService.create(createBranchmenuDto);
-  }
 
   @Get()
   findAll() {
@@ -22,6 +17,12 @@ export class BranchmenuController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.branchmenuService.findOne(+id);
+  }
+  
+  @UseGuards(AuthGuard('jwt'))
+  @Post()
+  create(@Body() createBranchmenuDto: CreateBranchmenuDto) {
+    return this.branchmenuService.create(createBranchmenuDto);
   }
 
   @Patch(':id')

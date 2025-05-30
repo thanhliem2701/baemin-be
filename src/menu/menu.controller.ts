@@ -4,24 +4,23 @@ import { CreateMenuDto } from './dto/create-menu.dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
 import { AuthGuard } from '@nestjs/passport';
 
-@UseGuards(AuthGuard('jwt'))
+
 @Controller('menu')
 export class MenuController {
-  constructor(private readonly menuService: MenuService) {}
-
-  @Post()
-  create(@Body() createMenuDto: CreateMenuDto) {
-    return this.menuService.create(createMenuDto);
-  }
-
+  constructor(private readonly menuService: MenuService) { }
   @Get()
-  findAll() {
+  findAll() {1
     return this.menuService.findAll();
   }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.menuService.findOne(+id);
+  }
+  
+  @UseGuards(AuthGuard('jwt'))
+  @Post()
+  create(@Body() createMenuDto: CreateMenuDto) {
+    return this.menuService.create(createMenuDto);
   }
 
   @Patch(':id')

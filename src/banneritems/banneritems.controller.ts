@@ -5,15 +5,9 @@ import { UpdateBanneritemDto } from './dto/update-banneritem.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 
-@UseGuards(AuthGuard('jwt'))
 @Controller('banneritems')
 export class BanneritemsController {
   constructor(private readonly banneritemsService: BanneritemsService) {}
-
-  @Post()
-  create(@Body() createBanneritemDto: CreateBanneritemDto) {
-    return this.banneritemsService.create(createBanneritemDto);
-  }
 
   @Get()
   findAll() {
@@ -23,6 +17,12 @@ export class BanneritemsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.banneritemsService.findOne(+id);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post()
+  create(@Body() createBanneritemDto: CreateBanneritemDto) {
+    return this.banneritemsService.create(createBanneritemDto);
   }
 
   @Patch(':id')
