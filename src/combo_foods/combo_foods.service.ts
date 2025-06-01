@@ -85,7 +85,6 @@ export class ComboFoodsService {
   //get Combo or food by menu
   async getComboFoodByMenu(menu_id: number, branch_id: number) {
     //Get all Combo or food by branch
-    console.log("MENU : ",menu_id)
     if (menu_id === -1) {
       this.validationService.validateId(branch_id, messages.BRANCHID_NULL);
       return await this.prisma.combo_foods.findMany({

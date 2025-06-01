@@ -33,7 +33,7 @@ export class AuthService {
         // generate Active toke valid for 1 day and refresh token valid for 7 days
         const { bearerToken, bearerRefreshToken } = await this.generateToken(username, ConstantCodes.TOKEN_NOT_ACTIVE);
 
-        return { bearerToken, bearerRefreshToken };
+        return { user, bearerToken, bearerRefreshToken };
     }
     // verify token
     async verify(token: string, sercretCode: string) {

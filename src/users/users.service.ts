@@ -36,23 +36,6 @@ export class UsersService {
     }
   }
 
-  // // login user
-  // async login(username: string, password: string) {
-  //   // Find the user by username
-  //   const user = await this.findOne(username);
-  //   if (!user) {
-  //     return 'User not found';
-  //   }
-  //   // Check if the password matches
-  //   const isMatch = await bcrypt.compare(password, user.password);
-  //   if (!isMatch) return 'Password is incorrect';
-    
-  //   // leave out the password from the user object
-  //   const { password: _, ...safeUser } = user;
-
-  //   return safeUser;
-  // }
-
   // find user by username use for login function
   findOne(username: string) {
     return this.prisma.users.findFirst({ where: { username } });
