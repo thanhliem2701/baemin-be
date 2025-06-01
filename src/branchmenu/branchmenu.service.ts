@@ -45,6 +45,17 @@ export class BranchmenuService {
     return this.prisma.branchmenu.findFirst({ where: { id: validId } });
   }
 
+  // get all menu from specific branch
+  getAllMenuByBranch(id:number)
+  {
+    const validId = this.validationService.validateId(id,messages.BRANCHID_NULL)
+    return this.prisma.branchmenu.findMany({
+      where:  {
+        branch_id:validId
+      }
+    })
+  }
+
   async update(id: number, updateBranchmenuDto: UpdateBranchmenuDto) {
     const { name, icon, branch_id, menu_flag } = updateBranchmenuDto
     try {

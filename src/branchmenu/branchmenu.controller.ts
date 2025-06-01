@@ -19,6 +19,12 @@ export class BranchmenuController {
     return this.branchmenuService.findOne(+id);
   }
   
+  //Get all menu from specific branch
+  @Get('/branchid/:id')
+  getMenuByBranch(@Param('id') id:number){
+    return this.branchmenuService.getAllMenuByBranch(id);
+  }
+
   @UseGuards(AuthGuard('jwt'))
   @Post()
   create(@Body() createBranchmenuDto: CreateBranchmenuDto) {

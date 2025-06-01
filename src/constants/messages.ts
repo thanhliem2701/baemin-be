@@ -38,6 +38,8 @@ export const messages = {
     PRICE_NULL: 'Price must be a non-negative number',
     COMOBO_FOOD_ID_NULL: 'Combo or food id can not be null',
     ORDER_ERROR: 'Order must include at least one order detail',
+    PROMOTION_FLAG_NULL: 'Promotion flag can not be null !',
+    PROMOTION_FLAG_INVALID: 'Invalid promotion flag!',
     
     // Normal messages
     ADD_BANNER_SUCCESSFUL: 'Add new banner item successfully !',

@@ -60,6 +60,7 @@ model combo_foods {
   created_at     DateTime?      @default(now()) @db.Timestamp(6)
   updated_at     DateTime?      @default(now()) @db.Timestamp(6)
   promotion_flag Int?           @default(3)
+  tag            String?        @db.VarChar(250)
   branchmenu     branchmenu?    @relation(fields: [menu_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "combo_menu_id_fkey")
   order_detail   order_detail[]
 }
@@ -78,16 +79,16 @@ model companies {
 }
 
 model order_detail {
-  id          Int          @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   order_id    Int?
-  food_id     Int?
-  name        String?      @db.VarChar(255)
+  food_id     Int
+  name        String?     @db.VarChar(255)
   quantity    Int?
-  amount      Decimal?     @db.Decimal(10, 2)
-  created_at  DateTime?    @default(now()) @db.Timestamp(6)
-  updated_at  DateTime?    @default(now()) @db.Timestamp(6)
-  combo_foods combo_foods? @relation(fields: [food_id], references: [id], onUpdate: NoAction)
-  orders      orders?      @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  amount      Decimal?    @db.Decimal(10, 2)
+  created_at  DateTime?   @default(now()) @db.Timestamp(6)
+  updated_at  DateTime?   @default(now()) @db.Timestamp(6)
+  combo_foods combo_foods @relation(fields: [food_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  orders      orders?     @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.

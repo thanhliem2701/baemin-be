@@ -13,11 +13,27 @@ export class ComboFoodsController {
     return this.comboFoodsService.findAll();
   }
 
-  @Get(':id')
+  @Get('/id/:id')
   findOne(@Param('id') id: string) {
     return this.comboFoodsService.findOne(+id);
   }
 
+  @Get('/promotion/:promotion_flag')
+  findMany(@Param('promotion_flag') promotion_flag: string) {
+    const flagArray: number[] = promotion_flag.split(',').map(Number);
+    return this.comboFoodsService.findManyByPromotion(flagArray);
+  }
+
+  @Get('/name/:name')
+  getComboFoodByName(@Param('name') key:string) {
+    return this.comboFoodsService.getComboFoodByName(key);
+  }
+
+  @Get('/menu/:menu_id/branch/:branch_id')
+  getComboFoodByMenu(@Param('menu_id') menu_id:number, @Param('branch_id') branch_id:number) {
+    return this.comboFoodsService.getComboFoodByMenu(+menu_id,+branch_id);
+  }
+  
   @UseGuards(AuthGuard('jwt'))
   @Post()
   create(@Body() createComboFoodDto: CreateComboFoodDto) {

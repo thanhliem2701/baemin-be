@@ -30,8 +30,8 @@ export class ValidationService {
 
     //check item length
     validateLength(value: string, erorMessage: string, min: number, max: number) {
-    if (!value || value.length < min || value.length > max) {
-      throw new BadRequestException(erorMessage);
+        if (!value || value.length < min || value.length > max) {
+            throw new BadRequestException(erorMessage);
+        }
     }
-  }
 }

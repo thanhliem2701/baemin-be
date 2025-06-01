@@ -9,4 +9,5 @@ export class UpdateComboFoodDto extends PartialType(CreateComboFoodDto) {
     price: number
     img: string
     promotion_flag: number
+    tag:string
 }
