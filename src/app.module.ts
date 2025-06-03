@@ -14,11 +14,12 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { CommonModule } from './common/common.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [MenuModule, BanneritemsModule, CompaniesModule, BranchesModule, BranchmenuModule, 
     ComboFoodsModule, UsersModule, OrdersModule, PrismaModule, ConfigModule.forRoot({isGlobal: true}), 
-    AuthModule,JwtModule.register({global: true}), CommonModule],
+    AuthModule,JwtModule.register({global: true}), CommonModule,MailModule],
   controllers: [AppController],
   providers: [AppService],
 })

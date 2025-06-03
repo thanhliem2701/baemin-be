@@ -8,7 +8,7 @@ import { AuthGuard } from '@nestjs/passport';
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
-  @Post("create")
+  @Post("/create")
   create(@Body() createOrderDto: CreateOrderDto) {
     return this.ordersService.create(createOrderDto);
   }
